@@ -7,17 +7,16 @@ fun main() {
 }
 
 object Day5 : Solve<Int, Int>(2024, 5) {
+    private val rules = input.mapNotNull { it.takeIf { line -> line.contains('|') } }.map { line -> line.split('|').map { it.toInt() } }
+    private val updates = input.mapNotNull { it.takeIf { line -> line.contains(',') } }.map { line -> line.split(',').map { it.toInt() } }
+
     override fun solvePart1(): Int {
-        val rules = input.mapNotNull { it.takeIf { line -> line.contains('|') } }.map { line -> line.split('|').map { it.toInt() } }
-        val updates = input.mapNotNull { it.takeIf { line -> line.contains(',') } }.map { line -> line.split(',').map { it.toInt() } }
         return updates.filter { update ->
             rules.filter { it.all { it in update } }.all { (a, b) -> update.indexOf(a) < update.indexOf(b) }
         }.sumOf { it[it.size / 2] }
     }
 
     override fun solvePart2(): Int {
-        val rules = input.mapNotNull { it.takeIf { line -> line.contains('|') } }.map { line -> line.split('|').map { it.toInt() } }
-        val updates = input.mapNotNull { it.takeIf { line -> line.contains(',') } }.map { line -> line.split(',').map { it.toInt() } }
         return updates.filterNot { update -> rules.filter { it.all { it in update } }.all { (a, b) -> update.indexOf(a) < update.indexOf(b) } }
             .sumOf { update ->
                 update.toMutableList().let { list ->
